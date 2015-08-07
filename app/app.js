@@ -3,5 +3,5 @@
 /*global angular */
 "use strict";
 
-angular.module("myApp", [
-]);
+angular.module("chApp", ["ngRoute"])
+;

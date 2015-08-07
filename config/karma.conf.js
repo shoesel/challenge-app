@@ -5,7 +5,7 @@ module.exports = function(config) {
 	config.set({
 		basePath : '../',
 		frameworks : [ 'jasmine' ],
-		files : [ 'libs/angular/angular.js',
+		files : [ 'libs/angular/angular.js', 'libs/angular-route/angular-route.js',
 				'libs/angular-mocks/angular-mocks.js', 'app/**/*.js',
 				'tests/**/*.js', 'app/templates/*.html' ],
 		preprocessors : {
