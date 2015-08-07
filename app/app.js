@@ -12,4 +12,12 @@ angular.module("chApp", [
 	"platform": undefined,
 	"map": undefined
 })
+.value("lang", {
+	"de": {
+		"queryPlaceHolder": "Ort oder Adresse"
+	},
+	"en": {
+		"queryPlaceHolder": "Place or address"	
+	}
+})
 ;

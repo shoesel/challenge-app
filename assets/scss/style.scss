@@ -17,6 +17,11 @@ $listWidth: 300px;
 	
 	.list {
 		width: $listWidth;
+		position: relative;
+
+		> * {
+			width: 100%;
+		}
 	}
 	
 	.map {
