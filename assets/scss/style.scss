@@ -1,1 +1,25 @@
-/* this is my style */
+$appWidth: 1000px;
+$listWidth: 300px;
+
+.app {
+	width: 1000px;
+	margin: 120px auto 0;
+
+	.wrapper {
+		white-space: nowrap;
+		border: 1px solid #ddd;
+	}
+
+	.list, .map {
+		display: inline-block;
+		height: 400px;
+	}
+	
+	.list {
+		width: $listWidth;
+	}
+	
+	.map {
+		width: $appWidth - $listWidth;
+	}
+}
