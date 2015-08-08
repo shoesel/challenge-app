@@ -65,5 +65,17 @@ function(
 	waypoints
 ){	
 	$scope.list = waypoints.list;
+
+	$scope.removeFromList = function(index){
+		$scope.list.splice(index, 1);
+	};
+
+	$scope.moveInList = function(newIndex, item){
+		if(newIndex>-1 && newIndex<$scope.list.length){
+			$scope.removeFromList($scope.list.indexOf(item));
+			$scope.list.splice(newIndex, 0, item);
+		}
+	};
+
 }])
 ;

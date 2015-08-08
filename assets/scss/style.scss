@@ -19,7 +19,7 @@ $buttonWitdth: 34px;
 	.list {
 		overflow-y: scroll;
 		margin-right: -17px;
-		width: $listWidth;
+		width: $listWidth + 17px;
 		position: relative;
 
 		.search, .results {
@@ -35,7 +35,7 @@ $buttonWitdth: 34px;
 			display: block;
 
 			.text-btn {
-				width: $listWidth - $buttonWitdth - 5px - 17px;
+				width: $listWidth - $buttonWitdth - 5px;
 				text-align: left;
 			}
 		}
@@ -51,7 +51,7 @@ $buttonWitdth: 34px;
 
 			.place {
 				.title {
-					width: 100%;
+					width: $listWidth - 3*$buttonWitdth - 16px - 17px;
 					display: inline-block;
 					float: left;
 					text-align: left;
