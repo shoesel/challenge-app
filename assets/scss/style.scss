@@ -33,11 +33,13 @@ $listWidth: 300px;
 
 			.text-btn {
 				width: $listWidth;
+				text-align: left;
 			}
 		}
 	}
 	
 	.map {
-		width: $appWidth - $listWidth;
+		width: $appWidth - $listWidth - 2px;
+		box-shadow: 0 0 1px #ddd;
 	}
 }
