@@ -31,7 +31,7 @@ function(
 
 	$scope.fetchPlaces = function(){
 		var loc = mapProxy.map.getCenter();
-		$http.get(PlacesUrlFactory.getExploreUrl(loc, this.search, true))
+		$http.get(PlacesUrlFactory.getExploreUrl(loc, this.search))
 			.then(function(response){
 				$scope.emptyPlaces();
 				Array.prototype.push.apply($scope.places, response.data.results.items);
@@ -149,11 +149,7 @@ function(
 						RouterFactory.drawRoute(route);
 					}
 				};
-			//mapProxy.router.calculateRoute(param, resolve, reject);
-
-			$http.get("app/route.sample.json").then(function(resp){
-				resolve(resp.data);
-			});
+			mapProxy.router.calculateRoute(params, resolve, reject);
 		} else {
 			
 		}
