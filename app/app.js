@@ -18,4 +18,7 @@ angular.module("chApp", ["ngRoute"])
 		"queryPlaceHolder": "Place or address"	
 	}
 })
+.value("waypoints", {
+	list: []
+})
 ;

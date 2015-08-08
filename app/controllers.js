@@ -5,12 +5,15 @@ angular
 	"lang",
 	"$http",
 	"mapProxy",
-	"PlacesUrlFactory", function(
+	"PlacesUrlFactory",
+	"waypoints",
+	function(
 	$scope,
 	lang,
 	$http,
 	mapProxy,
-	PlacesUrlFactory
+	PlacesUrlFactory,
+	waypoints
 ){
 	var browserLang = navigator.language || navigator.userLanguage || "en",
 		langObject = lang[browserLang];
@@ -51,6 +54,18 @@ angular
 	};
 
 	$scope.addToList = function(){
-
+		waypoints.list.push(this.place);
+		$scope.places = [];
+		$scope.search = "";
 	};
-}]);
+}])
+.controller("ListController", [
+	"$scope",
+	"waypoints",
+	function(
+	$scope,
+	waypoints
+){	
+	$scope.list = waypoints.list;
+}])
+;

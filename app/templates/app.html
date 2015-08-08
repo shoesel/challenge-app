@@ -8,9 +8,17 @@
 				<button class="btn btn-default" type="button" ng-click="clearPlaces()"><i class="glyphicon glyphicon-remove"></i></button>
 			</span>
 		</div>
-		<div class="results">
+		<div class="results {{places.length ? 'filled' : ''}}">
 			<div ng-repeat="place in places | filter:search" class="place btn-group">
 				<button type="button" class="btn text-btn btn-default" ng-click="putMarker()">{{place.title}}</button>
+				<button type="button" class="btn add-btn btn-default" ng-click="addToList()">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+			</div>
+		</div>
+		<div class="waypoints" ng-controller="ListController">
+			<div ng-repeat="place in list track by $index" class="place btn-group">
+				<span class="input-group-addon title">{{$index + 1 + ". " + place.title}}</span>
 			</div>
 		</div>
 	</div><!--
