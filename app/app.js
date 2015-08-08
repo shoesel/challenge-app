@@ -4,7 +4,8 @@
 "use strict";
 
 angular.module("chApp", [
-	"ngRoute"
+	"ngRoute",
+	"ngAnimate"
 ])
 .value("mapProxy", {
 	"app_id": "K8Vpg17foNbs5R8PBNj0",

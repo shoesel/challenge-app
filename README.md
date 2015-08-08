@@ -19,6 +19,9 @@ Font Awesome is an iconic font which can be used to display many icons onto your
 ###ngRoute
 Plugin for angular to enable url-navigation in web-apps.
 
+###ngAnimate
+Plugin for angular to auto-css-animate items e.g. in lists.
+
 ## Usage
 run `grunt dev` for development
 
