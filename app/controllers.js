@@ -101,6 +101,25 @@ function(
 ){
 	$scope.list = waypoints.list;
 	$scope.mode = "car";
+	$scope.distance = "0m";
+	$scope.duration = "0s";
+
+	$scope.formatValues = function(distance, duration){
+		console.log(distance, duration);
+		var h = Math.floor(duration / 3600);
+		duration -= h * 3600;
+		var min = Math.floor(duration / 60);
+		duration -= min * 60;
+		$scope.duration = h + "h " + min + "min " + duration + "s";
+
+		var km = Math.floor(distance / 1000);
+		distance -= km * 1000;
+		$scope.distance = km + "km " + distance + "m";
+
+		$scope.$apply();
+
+		console.log($scope.mode);
+	};
 
 	$scope.toggleMode = function(mode){
 		$scope.mode = mode;
@@ -119,13 +138,16 @@ function(
 			if(!mapProxy.router){
 				mapProxy.router = mapProxy.platform.getRoutingService();
 			}
-			var params = RouterParameterFactory.getCarRoute(waypoints.list, $scope.mode),
+			var params = RouterParameterFactory.getRoute(waypoints.list, $scope.mode),
 				reject = function(){
 
 				},
 				resolve = function(result){
-					if(result.response.route){
-						RouterFactory.drawRoute(result.response.route[0]);
+					if(result.response && result.response.route){
+						var route = result.response.route[0],
+							summary = route.leg[0].summary;
+						$scope.formatValues(summary.distance, summary.travelTime);
+						RouterFactory.drawRoute(route);
 					}
 				};
 			//mapProxy.router.calculateRoute(param, resolve, reject);
