@@ -8,7 +8,7 @@
 				<button class="btn btn-default" type="button" ng-click="clearPlaces()"><i class="glyphicon glyphicon-remove"></i></button>
 			</span>
 		</div>
-		<div class="results {{places.length ? 'filled' : ''}}">
+		<div class="results {{places.length ? 'filled' : ''}}" ng-hide="busy">
 			<div ng-repeat="place in places | filter:search" class="place btn-group">
 				<button type="button" class="btn text-btn btn-default" ng-click="putMarker()">{{place.title}}</button>
 				<button type="button" class="btn add-btn btn-default" ng-click="addToList()">
@@ -30,6 +30,7 @@
 				</button>
 			</div>
 		</div>
+		<div class="routedetails" ng-controller="RouterController"></div>
 	</div><!--
 	--><div class="map" map-container></div>
 	</div>
