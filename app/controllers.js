@@ -78,4 +78,70 @@ function(
 	};
 
 }])
+.controller("RouterController", [
+	"$scope", 
+	"waypoints",
+	"mapProxy",
+	"RouterParameterFactory",
+	"$http",
+function(
+	$scope,
+	waypoints,
+	mapProxy,
+	RouterParameterFactory,
+	$http
+){
+	$scope.list = waypoints.list;
+
+	$scope.$watch(function(){
+		return waypoints.list;
+	}, function(){
+		if(mapProxy.routeGroup){
+			mapProxy.routeGroup.removeAll();
+			delete mapProxy.routeGroup;
+		}
+		if($scope.list.length > 1){
+			if(!mapProxy.router){
+				mapProxy.router = mapProxy.platform.getRoutingService();
+			}
+			var params = RouterParameterFactory.getCarRoute(waypoints.list),
+				reject = function(){
+
+				},
+				resolve = function(result){
+					 var route,
+						routeShape,
+						startPoint,
+						endPoint,
+						strip;
+
+					if(result.response.route){
+						route = result.response.route[0];
+						routeShape = route.shape;
+						strip = new H.geo.Strip();
+						routeShape.forEach(function(point) {
+							var parts = point.split(',');
+							strip.pushLatLngAlt(parts[0], parts[1]);
+						});
+						var routeLine = new H.map.Polyline(strip, {
+								style: { strokeColor: 'blue', lineWidth: 10 }
+							}),
+							group = new H.map.Group({
+								objects: [routeLine]
+							});
+						mapProxy.routeGroup = group;
+						mapProxy.map.addObject(group);
+						mapProxy.map.setViewBounds(routeLine.getBounds(), true);
+					}
+				};
+			//mapProxy.router.calculateRoute(param, resolve, reject);
+
+			$http.get("app/route.sample.json").then(function(resp){
+				resolve(resp.data);
+			});
+		} else {
+			
+		}
+	}, true);		
+}])
 ;

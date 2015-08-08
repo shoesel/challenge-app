@@ -40,4 +40,35 @@ angular
 		placeMarker: placeMarker
 	};
 }])
+.factory("RouterParameterFactory", [function(){
+	function getCarRoute(waypoints){
+		var params = {
+			mode: "fastest;car",
+			representation: "display"
+		};
+		if(!waypoints.length){
+			return -1;
+		}
+
+		var i=0, j=0, last;
+		do {
+			var waypoint = waypoints[i++],
+				current = "geo!" + waypoint.position[0] + "," + waypoint.position[1];
+			if(last != current){
+				params["waypoint" + j] = current;
+				last = current;
+				j++;
+			}
+
+		} while(i<waypoints.length);
+
+		if(params.waypoint1){
+			return params;
+		}
+		return -1;
+	}
+	return {
+		getCarRoute: getCarRoute
+	};
+}])
 ;
