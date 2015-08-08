@@ -21,6 +21,7 @@ angular
 		langObject = lang[browserLang];
 	$scope.lang = langObject;
 	$scope.ready = false;
+	$scope.busy = false;
 
 	$scope.$watch("mapProxy", function(){
 		if(mapProxy.map){
