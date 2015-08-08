@@ -1,13 +1,21 @@
 angular
 .module("chApp")
-.factory("PlacesUrlFactory", ["mapProxy", function(mapProxy){
-	var baseUrl = "http://places.cit.api.here.com/places/v1/";
+.factory("UrlFactory", ["mapProxy", function(mapProxy){
+	var placesBaseUrl = "http://places.cit.api.here.com/places/v1/",
+		searchBaseUrl = "http://geocoder.api.here.com/6.2/";
 	return {
 		getExploreUrl : function(pos, q){
-			return [baseUrl + "discover/explore?app_id=" + mapProxy.app_id,
+			return [placesBaseUrl + "discover/explore?app_id=" + mapProxy.app_id,
 				"app_code=" + mapProxy.app_code,
 				"at=" + pos.lat + "," + pos.lng,
 				"q=" + q].join("&");
+		},
+		getSearchUrl: function(q){
+			return [searchBaseUrl + "geocode.json?app_id=" + mapProxy.app_id,
+				"app_code=" + mapProxy.app_code,
+				"gen=8",
+				"searchtext=" + q
+				].join("&");
 		}
 	};
 }])
