@@ -3,7 +3,7 @@
 	--><div class="list">
 		<div class="search input-group">
 			<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-			<input type="text" class="form-control" ng-model="search" placeholder="{{lang.queryPlaceHolder}}" ng-change="fetchPlaces()" ng-show="ready">
+			<input type="text" class="form-control" ng-model="search" ng-model-options="{debounce: 250}" placeholder="{{lang.queryPlaceHolder}}" ng-change="fetchPlaces()" ng-show="ready">
 			<span class="input-group-btn">
 				<button class="btn btn-default" type="button" ng-click="clearPlaces()"><i class="glyphicon glyphicon-remove"></i></button>
 			</span>
