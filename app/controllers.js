@@ -1,21 +1,23 @@
 angular
 .module("chApp")
 .controller("AppController", [
-	"$scope", 
+	"$scope",
 	"lang",
 	"$http",
 	"mapProxy",
-	"PlacesUrlFactory",
+	"UrlFactory",
 	"waypoints",
 	"MarkerFactory",
+	"$q",
 function(
 	$scope,
 	lang,
 	$http,
 	mapProxy,
-	PlacesUrlFactory,
+	UrlFactory,
 	waypoints,
-	MarkerFactory
+	MarkerFactory,
+	$q
 ){
 	var browserLang = navigator.language || navigator.userLanguage || "en",
 		langObject = lang[browserLang];
@@ -31,11 +33,23 @@ function(
 
 	$scope.fetchPlaces = function(){
 		var loc = mapProxy.map.getCenter();
-		$http.get(PlacesUrlFactory.getExploreUrl(loc, this.search))
-			.then(function(response){
-				$scope.emptyPlaces();
-				Array.prototype.push.apply($scope.places, response.data.results.items);
+		$q.all([
+			$http.get(UrlFactory.getExploreUrl(loc, this.search)),
+			$http.get(UrlFactory.getSearchUrl(this.search, true))
+		]).then(function(responses){
+			$scope.places = responses[0].data.results.items;
+			var resps = responses[1].data.Response.View[0].Result.map(function(item){
+				return {
+					title: item.Location.Address.Label,
+					position: [
+						item.Location.DisplayPosition.Latitude,
+						item.Location.DisplayPosition.Longitude
+					]
+				};
 			});
+			Array.prototype.push.apply($scope.places, resps);
+			$scope.$apply();
+		});
 	};
 
 	$scope.emptyPlaces = function(){
@@ -69,7 +83,7 @@ function(
 	function(
 	$scope,
 	waypoints
-){	
+){
 	$scope.list = waypoints.list;
 
 	$scope.removeFromList = function(index){
@@ -84,7 +98,7 @@ function(
 	};
 }])
 .controller("RouterController", [
-	"$scope", 
+	"$scope",
 	"waypoints",
 	"mapProxy",
 	"RouterParameterFactory",
@@ -151,7 +165,7 @@ function(
 				};
 			mapProxy.router.calculateRoute(params, resolve, reject);
 		} else {
-			
+
 		}
 	};
 
