@@ -32,9 +32,23 @@ function(
 			});
 	};
 
+	$scope.clearPlaces = function(){
+		$scope.places = [];
+		$scope.search = "";
+		mapProxy.group.removeAll();
+		var pos = mapProxy.startPos;
+		mapProxy.group.addObject(new H.map.Marker(pos));
+		mapProxy.map.setCenter(pos, true);
+	};
+
 	$scope.putMarker = function(){
 		mapProxy.group.removeAll();
-		mapProxy.group.addObject(new H.map.Marker(this.place.position));
+		var pos = {
+			lat: this.place.position[0],
+			lng: this.place.position[1]
+		};
+		mapProxy.group.addObject(new H.map.Marker(pos));
+		mapProxy.map.setCenter(pos, true);
 	};
 
 	$scope.addToList = function(){

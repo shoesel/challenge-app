@@ -24,6 +24,7 @@ function(
 					lng: 13.4,
 					lat: 52.51
 				};
+			mapProxy.startPos = startPos;
 			mapProxy.map = new H.Map(elem[0], defaultLayers.normal.map, {zoom: 10});
 			mapProxy.map.setCenter(startPos);
 			if(navigator.geolocation){
@@ -36,6 +37,8 @@ function(
 						group = new H.map.Group({
 							objects: [marker]
 						});
+
+					mapProxy.startPos = myPos;
 
 					mapProxy.group = group;
 
