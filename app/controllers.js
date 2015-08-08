@@ -76,7 +76,6 @@ function(
 			$scope.list.splice(newIndex, 0, item);
 		}
 	};
-
 }])
 .controller("RouterController", [
 	"$scope", 
@@ -84,18 +83,27 @@ function(
 	"mapProxy",
 	"RouterParameterFactory",
 	"$http",
+	"RouterFactory",
 function(
 	$scope,
 	waypoints,
 	mapProxy,
 	RouterParameterFactory,
-	$http
+	$http,
+	RouterFactory
 ){
 	$scope.list = waypoints.list;
+	$scope.mode = "car";
 
-	$scope.$watch(function(){
-		return waypoints.list;
-	}, function(){
+	$scope.toggleMode = function(mode){
+		$scope.mode = mode;
+	};
+
+	$scope.clearList = function(){
+		$scope.list.splice(0, $scope.list.length);
+	};
+
+	var handleChange = function(){
 		if(mapProxy.routeGroup){
 			mapProxy.routeGroup.removeAll();
 			delete mapProxy.routeGroup;
@@ -104,34 +112,13 @@ function(
 			if(!mapProxy.router){
 				mapProxy.router = mapProxy.platform.getRoutingService();
 			}
-			var params = RouterParameterFactory.getCarRoute(waypoints.list),
+			var params = RouterParameterFactory.getCarRoute(waypoints.list, $scope.mode),
 				reject = function(){
 
 				},
 				resolve = function(result){
-					 var route,
-						routeShape,
-						startPoint,
-						endPoint,
-						strip;
-
 					if(result.response.route){
-						route = result.response.route[0];
-						routeShape = route.shape;
-						strip = new H.geo.Strip();
-						routeShape.forEach(function(point) {
-							var parts = point.split(',');
-							strip.pushLatLngAlt(parts[0], parts[1]);
-						});
-						var routeLine = new H.map.Polyline(strip, {
-								style: { strokeColor: 'blue', lineWidth: 10 }
-							}),
-							group = new H.map.Group({
-								objects: [routeLine]
-							});
-						mapProxy.routeGroup = group;
-						mapProxy.map.addObject(group);
-						mapProxy.map.setViewBounds(routeLine.getBounds(), true);
+						RouterFactory.drawRoute(result.response.route[0]);
 					}
 				};
 			//mapProxy.router.calculateRoute(param, resolve, reject);
@@ -142,6 +129,12 @@ function(
 		} else {
 			
 		}
-	}, true);		
+	};
+
+	$scope.$watch("mode", handleChange);
+
+	$scope.$watch(function(){
+		return waypoints.list;
+	}, handleChange, true);
 }])
 ;

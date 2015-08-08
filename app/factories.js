@@ -41,9 +41,9 @@ angular
 	};
 }])
 .factory("RouterParameterFactory", [function(){
-	function getCarRoute(waypoints){
+	function getCarRoute(waypoints, mode){
 		var params = {
-			mode: "fastest;car",
+			mode: "fastest;" + mode,
 			representation: "display"
 		};
 		if(!waypoints.length){
@@ -69,6 +69,32 @@ angular
 	}
 	return {
 		getCarRoute: getCarRoute
+	};
+}]).factory("RouterFactory", [
+	"mapProxy",
+function(
+	mapProxy
+){
+	var drawRoute = function(route){
+		var routeShape = route.shape,
+			strip = new H.geo.Strip();
+			routeShape.forEach(function(point) {
+				var parts = point.split(',');
+				strip.pushLatLngAlt(parts[0], parts[1]);
+			});
+			var routeLine = new H.map.Polyline(strip, {
+					style: { strokeColor: 'blue', lineWidth: 10 }
+				}),
+				group = new H.map.Group({
+					objects: [routeLine]
+				});
+			mapProxy.routeGroup = group;
+			mapProxy.map.addObject(group);
+			mapProxy.map.setViewBounds(routeLine.getBounds(), true);
+	};
+
+	return {
+		drawRoute: drawRoute
 	};
 }])
 ;
