@@ -19,6 +19,15 @@
 		<div class="waypoints" ng-controller="ListController">
 			<div ng-repeat="place in list track by $index" class="place btn-group">
 				<span class="input-group-addon title">{{$index + 1 + ". " + place.title}}</span>
+				<button type="button" class="btn text-btn btn-default">
+					<span class="glyphicon glyphicon-chevron-up" ng-click="moveInList($index-1, place)"></span>
+				</button>
+				<button type="button" class="btn text-btn btn-default">
+					<span class="glyphicon glyphicon-chevron-down" ng-click="moveInList($index+1, place)"></span>
+				</button>
+				<button type="button" class="btn text-btn btn-warning">
+					<span class="glyphicon glyphicon-trash" ng-click="removeFromList($index)"></span>
+				</button>
 			</div>
 		</div>
 	</div><!--
