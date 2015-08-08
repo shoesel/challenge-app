@@ -37,7 +37,7 @@ describe("mapContainer", function(){
 		$rootScope.$digest();
 		expect(window.H.Map).toHaveBeenCalled();
 		expect(mapProxy.map).toBe(map);
-		expect(map.setCenter).toHaveBeenCalledWith(jasmine.any(Object));
+		expect(map.setCenter).toHaveBeenCalledWith(jasmine.any(Object), true);
 	}));
 
 	describe("with geolocation", function(){

@@ -29,7 +29,7 @@ function(
 			mapProxy.startPos = startPos;
 			mapProxy.zoom = 15;
 			mapProxy.map = new H.Map(elem[0], defaultLayers.normal.map, {zoom: 10});
-			mapProxy.map.setCenter(startPos);
+			mapProxy.map.setCenter(startPos, true);
 			if(navigator.geolocation){
 				navigator.geolocation.getCurrentPosition(function(pos){
 					MarkerFactory.placeMarker({
