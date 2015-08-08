@@ -8,15 +8,15 @@
 				<button class="btn btn-default" type="button" ng-click="clearPlaces()"><i class="glyphicon glyphicon-remove"></i></button>
 			</span>
 		</div>
-		<div class="results {{places.length ? 'filled' : ''}}">
-			<div ng-repeat="place in places | filter:search" class="place btn-group">
+		<div class="results">
+			<div ng-repeat="place in places | filter:search" class="place btn-group" ng-show="search.length">
 				<button type="button" class="btn text-btn btn-default" ng-click="putMarker()">{{place.title}}</button>
 				<button type="button" class="btn add-btn btn-default" ng-click="addToList()">
 					<span class="glyphicon glyphicon-plus"></span>
 				</button>
 			</div>
 		</div>
-		<div class="waypoints" ng-controller="ListController">
+		<div class="waypoints" ng-controller="ListController" ng-hide="places.length">
 			<div ng-repeat="place in list track by $index" class="place btn-group">
 				<span class="input-group-addon text">{{$index + 1 + ". " + place.title}}</span>
 				<button type="button" class="btn text-btn btn-default">
@@ -30,9 +30,9 @@
 				</button>
 			</div>
 		</div>
-		<div class="routedetails" ng-controller="RouterController">
+		<div class="routedetails" ng-controller="RouterController" ng-hide="places.length">
 			<div class="place btn-group">
-				<span class="input-group-addon text">TEST</span>
+				<span class="input-group-addon text">{{distance + " " + duration}}</span>
 				<button type="button" class="btn text-btn {{mode == 'car' ? 'btn-default' : ''}} {{list.length ? '' : 'disabled'}}">
 					<span class="fa fa-car" ng-click="toggleMode('car')"></span>
 				</button>

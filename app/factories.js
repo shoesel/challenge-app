@@ -41,10 +41,11 @@ angular
 	};
 }])
 .factory("RouterParameterFactory", [function(){
-	function getCarRoute(waypoints, mode){
+	function getRoute(waypoints, mode){
 		var params = {
 			mode: "fastest;" + mode,
-			representation: "display"
+			representation: "display",
+			legattributes: "summary"
 		};
 		if(!waypoints.length){
 			return -1;
@@ -68,7 +69,7 @@ angular
 		return -1;
 	}
 	return {
-		getCarRoute: getCarRoute
+		getRoute: getRoute
 	};
 }]).factory("RouterFactory", [
 	"mapProxy",
@@ -83,7 +84,7 @@ function(
 				strip.pushLatLngAlt(parts[0], parts[1]);
 			});
 			var routeLine = new H.map.Polyline(strip, {
-					style: { strokeColor: 'blue', lineWidth: 10 }
+					style: { strokeColor: 'blue', lineWidth: 5 }
 				}),
 				group = new H.map.Group({
 					objects: [routeLine]
