@@ -22,6 +22,7 @@ angular
 	$scope.lang = langObject;
 	$scope.ready = false;
 	$scope.busy = false;
+	$scope.places = [];
 
 	$scope.$watch("mapProxy", function(){
 		if(mapProxy.map){
@@ -33,12 +34,17 @@ angular
 		var loc = mapProxy.map.getCenter();
 		$http.get(PlacesUrlFactory.getExploreUrl(loc, this.search, true))
 			.then(function(response){
-				$scope.places = response.data.results.items;
+				$scope.emptyPlaces();
+				Array.prototype.push.apply($scope.places, response.data.results.items);
 			});
 	};
 
+	$scope.emptyPlaces = function(){
+		$scope.places.splice(0, $scope.places.length);
+	};
+
 	$scope.clearPlaces = function(){
-		$scope.places = [];
+		$scope.emptyPlaces();
 		$scope.search = "";
 		MarkerFactory.placeMarker();
 	};

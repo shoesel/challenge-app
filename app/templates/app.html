@@ -33,13 +33,13 @@
 		<div class="routedetails" ng-controller="RouterController">
 			<div class="place btn-group">
 				<span class="input-group-addon text">TEST</span>
-				<button type="button" class="btn text-btn {{mode == 'car' ? 'btn-default' : ''}}">
+				<button type="button" class="btn text-btn {{mode == 'car' ? 'btn-default' : ''}} {{list.length ? '' : 'disabled'}}">
 					<span class="fa fa-car" ng-click="toggleMode('car')"></span>
 				</button>
-				<button type="button" class="btn text-btn {{mode == 'pedestrian' ? 'btn-default' : ''}}">
+				<button type="button" class="btn text-btn {{mode == 'pedestrian' ? 'btn-default' : ''}} {{list.length ? '' : 'disabled'}}">
 					<span class="fa fa-male" ng-click="toggleMode('pedestrian')"></span>
 				</button>
-				<button type="button" class="btn text-btn {{mode == 'publicTransport' ? 'btn-default' : ''}}">
+				<button type="button" class="btn text-btn {{mode == 'publicTransport' ? 'btn-default' : ''}} {{list.length ? '' : 'disabled'}}">
 					<span class="fa fa-bus" ng-click="toggleMode('publicTransport')"></span>
 				</button>
 				<button type="button" class="btn text-btn btn-warning {{list.length ? '' : 'disabled'}}">
