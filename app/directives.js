@@ -2,8 +2,10 @@ angular
 .module("chApp")
 .directive("mapContainer", [
 	"mapProxy",
+	"MarkerFactory",
 function(
-	mapProxy
+	mapProxy,
+	MarkerFactory
 ){
 	return {
 		link: function(scope, elem, attr, ctrl){
@@ -25,32 +27,15 @@ function(
 					lat: 52.51
 				};
 			mapProxy.startPos = startPos;
+			mapProxy.zoom = 15;
 			mapProxy.map = new H.Map(elem[0], defaultLayers.normal.map, {zoom: 10});
 			mapProxy.map.setCenter(startPos);
 			if(navigator.geolocation){
 				navigator.geolocation.getCurrentPosition(function(pos){
-					var myPos = {
-							lng: pos.coords.longitude,
-							lat: pos.coords.latitude,
-						},
-						marker = new H.map.Marker(myPos),
-						group = new H.map.Group({
-							objects: [marker]
-						});
-
-					mapProxy.startPos = myPos;
-
-					mapProxy.group = group;
-
-					mapProxy.map.addObject(group);
-					
-					mapProxy.map.setCenter(myPos, true);
-
-					mapProxy.map.addEventListener("mapviewchangeend", function(){
-						this.setZoom(15, true);
-						this.removeEventListener("mapviewchangeend");
-					})
-					;
+					MarkerFactory.placeMarker({
+						lng: pos.coords.longitude,
+						lat: pos.coords.latitude,
+					});
 				});
 			}
 		}
