@@ -64,20 +64,32 @@ $buttonWitdth: 34px;
 			height: 100%;
 		}
 
-		.waypoints {
+		.routedetails {
+			position: absolute;
+			bottom: 0;
+		}
 
-			.place {
-				.title {
-					width: $listWidth - 3*$buttonWitdth - 16px - 17px;
-					display: inline-block;
-					float: left;
-					text-align: left;
-					line-height: 20px;
-				}
+		.waypoints .place, .routedetails .place {
+			.text {
+				width: $listWidth - 3*$buttonWitdth - 16px;
+				display: inline-block;
+				float: left;
+				text-align: left;
+				line-height: 20px;
+			}
 
-				.text-btn {
-					width: auto;
-				}
+			.text-btn {
+				width: auto;
+			}
+		}
+
+		.routedetails .place {
+			.text {
+				width: $listWidth - 4*$buttonWitdth - 16px;
+			}
+
+			.btn-default:focus {
+				background-color: white;
 			}
 		}
 	}
