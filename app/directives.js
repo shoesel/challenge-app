@@ -33,6 +33,8 @@ angular
 							objects: [marker]
 						});
 
+					mapProxy.group = group;
+
 					mapProxy.map.addObject(group);
 					
 					mapProxy.map.setCenter(myPos, true);

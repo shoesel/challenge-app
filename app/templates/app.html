@@ -1,10 +1,15 @@
 <div class="app" ng-controller="AppController">
 	<div class="wrapper"><!--
-	--><div class="list"><!--
-		--><div class="input-group"><!--
-			--><input type="text" class="form-control" ng-model="search" placeholder="{{lang.queryPlaceHolder}}"><!--
-		--></div><!--
-	--></div><!--
+	--><div class="list">
+		<div class="search input-group">
+			<input type="text" class="form-control" ng-model="search" placeholder="{{lang.queryPlaceHolder}}" ng-change="fetchPlaces()" ng-show="ready">
+		</div>
+		<div class="results">
+			<div ng-repeat="place in places | filter:search" class="place btn-group">
+				<button type="button" class="btn text-btn btn-default" ng-click="putMarker()">{{place.title}}</button>
+			</div>
+		</div>
+	</div><!--
 	--><div class="map" map-container></div>
 	</div>
 </div>
