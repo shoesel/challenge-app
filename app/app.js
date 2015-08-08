@@ -20,4 +20,7 @@ angular.module("chApp", [
 		"queryPlaceHolder": "Place or address"	
 	}
 })
+.value("waypoints", {
+	list: []
+})
 ;
