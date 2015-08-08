@@ -1,6 +1,23 @@
+@import "libs/compass-mixins/lib/compass";
+@import "libs/compass-mixins/lib/animation/core";
+@import "libs/compass-mixins/lib/animation/shared";
+@import "libs/compass-mixins/lib/animation/animate";
+@import "hotfix";
+
 $appWidth: 1000px;
 $listWidth: 300px;
 $buttonWitdth: 34px;
+
+.place {
+	&.ng-move,&.ng-enter,&.ng-leave {
+		@include transition(all linear .5s);
+	}
+	&.ng-leave.ng-leave-active {
+		opacity: 0;
+		background-color: red;
+	}
+}
+
 
 .app {
 	width: 1000px;

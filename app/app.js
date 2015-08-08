@@ -3,7 +3,7 @@
 /*global angular,H*/
 "use strict";
 
-angular.module("chApp", ["ngRoute"])
+angular.module("chApp", ["ngRoute", "ngAnimate"])
 .value("mapProxy", {
 	"app_id": "K8Vpg17foNbs5R8PBNj0",
 	"app_code": "kmjqZuHcHrJ6wUGDM4PZ-w",
