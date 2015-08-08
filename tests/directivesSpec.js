@@ -47,7 +47,7 @@ describe("mapContainer", function(){
 					latitude: 20
 				}
 			},
-			group = {};
+			group = { addObject: function(){}, removeAll: function(){}};
 
 		beforeEach(function(){
 			navigator.geolocation = {getCurrentPosition: function(){}};

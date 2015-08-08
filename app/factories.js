@@ -11,4 +11,33 @@ angular
 				"q=" + q].join("&");
 		}
 	};
-}]);
+}])
+.factory("MarkerFactory", ["mapProxy", function(mapProxy){
+	function placeMarker(pos){
+		var myPos = pos || mapProxy.startPos,
+			marker = new H.map.Marker(myPos),
+			group = new H.map.Group({
+				objects: [marker]
+			});
+
+		if(mapProxy.group){
+			mapProxy.group.removeAll();
+		}
+		if(myPos != mapProxy.startPos){
+			mapProxy.group = group;
+
+			mapProxy.map.addObject(group);
+		}
+		
+		mapProxy.map.setCenter(myPos, true);
+
+		mapProxy.map.addEventListener("mapviewchangeend", function(){
+			this.setZoom(mapProxy.zoom, true);
+			this.removeEventListener("mapviewchangeend");
+		});
+	}
+	return {
+		placeMarker: placeMarker
+	};
+}])
+;

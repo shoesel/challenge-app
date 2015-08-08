@@ -7,13 +7,15 @@ angular
 	"mapProxy",
 	"PlacesUrlFactory",
 	"waypoints",
+	"MarkerFactory",
 	function(
 	$scope,
 	lang,
 	$http,
 	mapProxy,
 	PlacesUrlFactory,
-	waypoints
+	waypoints,
+	MarkerFactory
 ){
 	var browserLang = navigator.language || navigator.userLanguage || "en",
 		langObject = lang[browserLang];
@@ -37,26 +39,22 @@ angular
 	$scope.clearPlaces = function(){
 		$scope.places = [];
 		$scope.search = "";
-		mapProxy.group.removeAll();
-		var pos = mapProxy.startPos;
-		mapProxy.group.addObject(new H.map.Marker(pos));
-		mapProxy.map.setCenter(pos, true);
+		MarkerFactory.placeMarker();
 	};
 
 	$scope.putMarker = function(){
-		mapProxy.group.removeAll();
 		var pos = {
 			lat: this.place.position[0],
 			lng: this.place.position[1]
 		};
-		mapProxy.group.addObject(new H.map.Marker(pos));
-		mapProxy.map.setCenter(pos, true);
+		MarkerFactory.placeMarker(pos);
 	};
 
 	$scope.addToList = function(){
 		waypoints.list.push(this.place);
 		$scope.places = [];
 		$scope.search = "";
+		mapProxy.group.removeAll();
 	};
 }])
 .controller("ListController", [
