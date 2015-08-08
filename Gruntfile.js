@@ -43,6 +43,13 @@ module.exports = function(grunt) {
 			}
 		},
 
+		copy : {
+			dev: {
+				src: "app/*.json",
+				dest: "dist/"
+			}
+		},
+
 		jshint : {
 			all : [ 'Gruntfile.js', 'app/*.js', 'app/**/*.js' ]
 		},
@@ -59,9 +66,9 @@ module.exports = function(grunt) {
 		watch : {
 			dev : {
 				files : [ 'Gruntfile.js', 'app/*.js', 'tests/*.js', 'test-libs/*.js', '*.html', 'app/**/*.html',
-						'assets/**/*.scss' ],
+						'assets/**/*.scss', 'app/*.json' ],
 				tasks : [ 'jshint', 'karma:unit', 'html2js:dist',
-						'concat:dist', 'sass:dev', 'clean:temp' ],
+						'copy', 'concat:dist', 'sass:dev', 'clean:temp' ],
 				options : {
 					atBegin : true
 				}
@@ -137,6 +144,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-html2js');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	grunt.loadNpmTasks('grunt-karma');
 

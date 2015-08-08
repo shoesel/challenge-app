@@ -18,9 +18,22 @@ $listWidth: 300px;
 	.list {
 		width: $listWidth;
 		position: relative;
+		overflow: hidden;
 
-		> * {
+		.search, .results {
 			width: 100%;
+		}
+
+		.results {
+			display: table;
+		}
+
+		.place {
+			display: block;
+
+			.text-btn {
+				width: $listWidth;
+			}
 		}
 	}
 	
