@@ -7,7 +7,7 @@ angular
 	"mapProxy",
 	"UrlFactory",
 	"waypoints",
-	"MarkerFactory",
+	"MapFactory",
 	"$q",
 	function(
 	$scope,
@@ -16,41 +16,57 @@ angular
 	mapProxy,
 	UrlFactory,
 	waypoints,
-	MarkerFactory,
+	MapFactory,
 	$q
 ){
 	var browserLang = navigator.language || navigator.userLanguage || "en",
-		langObject = lang[browserLang];
+		langShort = browserLang.split("-")[0].toLowerCase(),
+		langObject = lang[langShort] || lang.en;
+	$scope.langCode = langShort;
 	$scope.lang = langObject;
-	$scope.ready = false;
-	$scope.busy = false;
 	$scope.places = [];
-
-	$scope.$watch("mapProxy", function(){
-		if(mapProxy.map){
-			$scope.ready = true;
-		}
-	});
+	$scope.error = false;
 
 	$scope.fetchPlaces = function(){
-		var loc = mapProxy.map.getCenter();
-		$q.all([
-			$http.get(UrlFactory.getExploreUrl(loc, this.search)),
-			$http.get(UrlFactory.getSearchUrl(this.search))
-		]).then(function(responses){
-			$scope.places = responses[0].data.results.items;
-			var resps = responses[1].data.Response.View[0].Result.map(function(item){
-				return {
-					title: item.Location.Address.Label,
-					position: [
-						item.Location.DisplayPosition.Latitude,
-						item.Location.DisplayPosition.Longitude
-					]
-				};
+		if(this.search){
+			var loc = mapProxy.map.getCenter(),
+				places,
+				addresses;
+			$q.all([
+				$http.get(UrlFactory.getExploreUrl(loc, this.search)),
+				$http.get(UrlFactory.getCitySearchUrl(this.search.replace(/\s+/g,"+")))
+			]).then(function(responses){
+				$scope.error = false;
+				$scope.emptyPlaces();
+				if(responses[0] && 
+					responses[0].data && 
+					responses[0].data.results && 
+					responses[0].data.results.items
+				){
+					Array.prototype.push.apply($scope.places, resps);
+				}
+				if(responses[1] && 
+					responses[1].data && 
+					responses[1].data.Response && 
+					responses[1].data.Response.View && 
+					responses[1].data.Response.View[0] &&
+					responses[1].data.Response.View[0].Result
+				){
+					var resps = responses[1].data.Response.View[0].Result.map(function(item){
+						return {
+							title: item.Location.Address.Label,
+							position: [
+								item.Location.DisplayPosition.Latitude,
+								item.Location.DisplayPosition.Longitude
+							]
+						};
+					});
+					Array.prototype.push.apply($scope.places, resps);
+				}
+			}, function(){
+				$scope.error = true;
 			});
-			Array.prototype.push.apply($scope.places, resps);
-			$scope.$apply();
-		});
+		}
 	};
 
 	$scope.emptyPlaces = function(){
@@ -60,7 +76,7 @@ angular
 	$scope.clearPlaces = function(){
 		$scope.emptyPlaces();
 		$scope.search = "";
-		MarkerFactory.placeMarker();
+		MapFactory.placeMarker();
 	};
 
 	$scope.putMarker = function(){
@@ -68,7 +84,7 @@ angular
 			lat: this.place.position[0],
 			lng: this.place.position[1]
 		};
-		MarkerFactory.placeMarker(pos);
+		MapFactory.placeMarker(pos);
 	};
 
 	$scope.addToList = function(){
@@ -87,14 +103,19 @@ angular
 ){	
 	$scope.list = waypoints.list;
 
-	$scope.removeFromList = function(index){
-		$scope.list.splice(index, 1);
+	$scope.removeFromList = function(item){
+		var index = this.list.indexOf(item);
+		if(index >- 1){
+			this.list.splice(index, 1);
+		}
 	};
 
-	$scope.moveInList = function(newIndex, item){
-		if(newIndex>-1 && newIndex<$scope.list.length){
-			$scope.removeFromList($scope.list.indexOf(item));
-			$scope.list.splice(newIndex, 0, item);
+	$scope.moveInList = function(item, offset){
+		var index = this.list.indexOf(item),
+			newIndex = index + offset;
+		if(newIndex >-1 && newIndex < this.list.length){
+			this.removeFromList(item);
+			this.list.splice(newIndex, 0, item);
 		}
 	};
 }])
@@ -105,52 +126,55 @@ angular
 	"RouterParameterFactory",
 	"$http",
 	"RouterFactory",
+	"PlatformService",
+	"MapFactory",
 function(
 	$scope,
 	waypoints,
 	mapProxy,
 	RouterParameterFactory,
 	$http,
-	RouterFactory
+	RouterFactory,
+	PlatformService,
+	MapFactory
 ){
 	$scope.list = waypoints.list;
 	$scope.mode = "car";
 	$scope.distance = "0m";
 	$scope.duration = "0s";
 
-	$scope.formatValues = function(distance, duration){
-		console.log(distance, duration);
+	$scope.formatValues = function(_distance, _duration){
+		var result = [],
+			distance = parseInt(_distance),
+			duration = parseInt(_duration);
+
 		var h = Math.floor(duration / 3600);
 		duration -= h * 3600;
 		var min = Math.floor(duration / 60);
 		duration -= min * 60;
-		$scope.duration = h + "h " + min + "min " + duration + "s";
+		result.push(h + "h " + min + "min " + duration + "s");
 
 		var km = Math.floor(distance / 1000);
 		distance -= km * 1000;
-		$scope.distance = km + "km " + distance + "m";
-
-		$scope.$apply();
-
-		console.log($scope.mode);
+		result.push(km + "km " + distance + "m");
+		return result;
 	};
 
 	$scope.toggleMode = function(mode){
-		$scope.mode = mode;
+		this.mode = mode;
 	};
 
 	$scope.clearList = function(){
-		$scope.list.splice(0, $scope.list.length);
+		this.list.splice(0, $scope.list.length);
+		$scope.distance = "0m";
+		$scope.duration = "0s";
+		MapFactory.moveTo(mapProxy.startPos, mapProxy.zoom);
 	};
 
 	var handleChange = function(){
-		if(mapProxy.routeGroup){
-			mapProxy.routeGroup.removeAll();
-			delete mapProxy.routeGroup;
-		}
 		if($scope.list.length > 1){
 			if(!mapProxy.router){
-				mapProxy.router = mapProxy.platform.getRoutingService();
+				mapProxy.router = PlatformService.getRoutingService();
 			}
 			var params = RouterParameterFactory.getRoute(waypoints.list, $scope.mode),
 				reject = function(){
@@ -160,13 +184,15 @@ function(
 					if(result.response && result.response.route){
 						var route = result.response.route[0],
 							summary = route.leg[0].summary;
-						$scope.formatValues(summary.distance, summary.travelTime);
+						$scope.distance = summary.distance;
+						$scope.duration = summary.travelTime;
 						RouterFactory.drawRoute(route);
+						$scope.$apply();
 					}
 				};
 			mapProxy.router.calculateRoute(params, resolve, reject);
 		} else {
-			
+			mapProxy.routeGroup.removeAll();
 		}
 	};
 
