@@ -1,53 +1,74 @@
 angular
 .module("chApp")
-.factory("UrlFactory", ["mapProxy", function(mapProxy){
+.factory("UrlFactory", [
+	"APP_ID",
+	"APP_CODE",
+function(
+	app_id,
+	app_code
+){
 	var placesBaseUrl = "http://places.cit.api.here.com/places/v1/",
 		searchBaseUrl = "http://geocoder.api.here.com/6.2/";
 	return {
 		getExploreUrl : function(pos, q){
-			return [placesBaseUrl + "discover/explore?app_id=" + mapProxy.app_id,
-				"app_code=" + mapProxy.app_code,
+			return [placesBaseUrl + "discover/explore?app_id=" + app_id,
+				"app_code=" + app_code,
 				"at=" + pos.lat + "," + pos.lng,
 				"q=" + q].join("&");
 		},
-		getSearchUrl: function(q, debug){
-			return debug ? "app/geocode.sample.json" : [searchBaseUrl + "geocode.json?app_id=" + mapProxy.app_id,
-				"app_code=" + mapProxy.app_code,
+		getSearchUrl: function(q){
+			return [searchBaseUrl + "geocode.json?app_id=" + app_id,
+				"app_code=" + app_code,
 				"gen=8",
 				"searchtext=" + q
 				].join("&");
 		}
 	};
 }])
-.factory("MarkerFactory", ["mapProxy", function(mapProxy){
+.factory("MapFactory", [
+	"mapProxy",
+	"QueueService",
+	"$q",
+function(
+	mapProxy,
+	Queue,
+	$q
+){
 	function placeMarker(pos){
 		var myPos = pos || mapProxy.startPos,
-			marker = new H.map.Marker(myPos),
-			group = new H.map.Group({
-				objects: [marker]
+			marker = new H.map.Marker(myPos);
+
+		mapProxy.group.removeAll();
+		mapProxy.group.addObject(marker);
+
+		this.moveTo(myPos, mapProxy.zoom);
+	}
+
+	function moveTo(pos, zoom){
+		var myPos = pos || mapProxy.startPos;
+		Queue.add(function(resolve){
+			mapProxy.map.setCenter(myPos, true);
+			mapProxy.map.addEventListener("mapviewchangeend", function(){
+				this.removeEventListener("mapviewchangeend");
+				resolve();
 			});
-
-		if(mapProxy.group){
-			mapProxy.group.removeAll();
-		}
-		if(myPos != mapProxy.startPos){
-			mapProxy.group = group;
-
-			mapProxy.map.addObject(group);
-		}
-
-		mapProxy.map.setCenter(myPos, true);
-
-		mapProxy.map.addEventListener("mapviewchangeend", function(){
-			this.setZoom(mapProxy.zoom, true);
-			this.removeEventListener("mapviewchangeend");
+		}).add(function(resolve){
+			mapProxy.map.setZoom(zoom, true);
+			mapProxy.map.addEventListener("mapviewchangeend", function(){
+				this.removeEventListener("mapviewchangeend");
+				resolve();
+			});
 		});
 	}
+
 	return {
-		placeMarker: placeMarker
+		placeMarker: placeMarker,
+		moveTo: moveTo
 	};
 }])
-.factory("RouterParameterFactory", [function(){
+.factory("RouterParameterFactory", [
+function(
+){
 	function getRoute(waypoints, mode){
 		var params = {
 			mode: "fastest;" + mode,
@@ -80,25 +101,35 @@ angular
 	};
 }]).factory("RouterFactory", [
 	"mapProxy",
+	"QueueService",
 function(
-	mapProxy
+	mapProxy,
+	Queue
 ){
 	var drawRoute = function(route){
 		var routeShape = route.shape,
 			strip = new H.geo.Strip();
-			routeShape.forEach(function(point) {
-				var parts = point.split(',');
-				strip.pushLatLngAlt(parts[0], parts[1]);
-			});
-			var routeLine = new H.map.Polyline(strip, {
-					style: { strokeColor: 'blue', lineWidth: 5 }
-				}),
-				group = new H.map.Group({
-					objects: [routeLine]
-				});
-			mapProxy.routeGroup = group;
-			mapProxy.map.addObject(group);
+
+		routeShape.forEach(function(point) {
+			var parts = point.split(',');
+			strip.pushLatLngAlt(parts[0], parts[1]);
+		});
+
+		var routeLine = new H.map.Polyline(strip, {
+			style: { strokeColor: 'blue', lineWidth: 5 }
+		});
+
+		mapProxy.routeGroup.removeAll();
+
+		mapProxy.routeGroup.addObject(routeLine);
+
+		Queue.add(function(resolve){
 			mapProxy.map.setViewBounds(routeLine.getBounds(), true);
+			mapProxy.map.addEventListener("mapviewchangeend", function(){
+				this.removeEventListener("mapviewchangeend");
+				resolve();
+			});
+		});
 	};
 
 	return {

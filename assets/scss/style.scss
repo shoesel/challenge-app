@@ -35,6 +35,7 @@ $buttonWitdth: 34px;
 	
 	.list {
 		overflow-y: scroll;
+		overflow-x: hidden;
 		margin-right: -17px;
 		width: $listWidth + 17px;
 		position: relative;
@@ -46,6 +47,10 @@ $buttonWitdth: 34px;
 		.results {
 			display: table;
 			position: absolute;
+
+			.loader {
+				text-align: center;
+			}
 		}
 
 		.place {
@@ -54,6 +59,7 @@ $buttonWitdth: 34px;
 			.text-btn {
 				width: $listWidth - $buttonWitdth - 5px;
 				text-align: left;
+				overflow: hidden;
 			}
 		}
 
