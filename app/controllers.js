@@ -118,6 +118,12 @@ function(
 			this.list.splice(newIndex, 0, item);
 		}
 	};
+
+	$scope.moveBefore = function (index, item, evt) {
+		this.removeFromList(item);
+		this.list.splice(index, 0, item);
+	};
+
 }])
 .controller("RouterController", [
 	"$scope",

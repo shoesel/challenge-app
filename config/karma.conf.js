@@ -6,7 +6,8 @@ module.exports = function(config) {
 		basePath : '../',
 		frameworks : [ 'jasmine' ],
 		files : [ 'libs/angular/angular.js', 'libs/angular-route/angular-route.js',
-				'libs/angular-animate/angular-animate.js', 'libs/angular-mocks/angular-mocks.js', 'test-libs/*.js', 'app/**/*.js',
+				'libs/angular-animate/angular-animate.js', 'libs/angular-mocks/angular-mocks.js', 
+				'libs/ngDraggable/ngDraggable.js', 'test-libs/*.js', 'app/**/*.js',
 				'tests/**/*.js', 'app/templates/*.html' ],
 		preprocessors : {
 			'app/templates/*.html' : 'ng-html2js',

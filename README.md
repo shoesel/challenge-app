@@ -22,6 +22,9 @@ Plugin for angular to enable url-navigation in web-apps.
 ###ngAnimate
 Plugin for angular to auto-css-animate items e.g. in lists.
 
+###ngDraggable
+Plugin for angular to integrate simple drag'n'drop functionality.
+
 ## Usage
 run `grunt dev` for development
 

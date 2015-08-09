@@ -99,8 +99,16 @@ $buttonWitdth: 34px;
 			}
 		}
 
-		.waypoints .place {
-			@extend %place;
+		.waypoints {
+			
+			.place {
+				@extend %place;
+			}
+
+			.droparea {
+				height: 34px;
+				cursor: move;
+			}
 		}
 	}
 
