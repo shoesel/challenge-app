@@ -32,10 +32,21 @@ $buttonWitdth: 34px;
 	}
 }
 
+.page-header.second {
+	position: absolute;
+	top: 99px;
+	width: 100%;
+	z-index: -1;
+}
+
+.page-header small {
+	margin-left: 20px;
+}
+
 .app {
 	position: relative;
 	width: 1000px;
-	margin: 120px auto 0;
+	margin: 0 auto;
 
 	.wrapper {
 		overflow: hidden;
@@ -90,9 +101,6 @@ $buttonWitdth: 34px;
 
 		.waypoints .place {
 			@extend %place;
-		}
-
-		.routedetails .place {
 		}
 	}
 
