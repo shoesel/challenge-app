@@ -2,7 +2,7 @@
 <div class="page-header second"></div>
 <div class="app" ng-controller="AppController">
 	<div class="page-header">
-		<h1>ChallengeApp<small>Route navigation with HERE</small></h1>
+		<h1>ChallengeApp<small>{{lang.subHeader}}</small></h1>
 	</div>
 	<div class="wrapper"><!--
 		--><div class="search input-group">
@@ -32,17 +32,19 @@
 			</div>
 			<div class="waypoints {{search.length ? 'ng-hide' : ''}}" ng-controller="ListController">
 				<div class="place spacer"></div>
-				<div ng-repeat="place in list track by $index" class="place btn-group">
-					<span class="input-group-addon text">{{$index + 1 + ". " + place.title}}</span>
-					<button type="button" class="btn text-btn btn-default" ng-click="moveInList(place, -1)">
-						<span class="glyphicon glyphicon-chevron-up"></span>
-					</button>
-					<button type="button" class="btn text-btn btn-default" ng-click="moveInList(place, 1)">
-						<span class="glyphicon glyphicon-chevron-down"></span>
-					</button>
-					<button type="button" class="btn text-btn btn-warning" ng-click="removeFromList(place)">
-						<span class="glyphicon glyphicon-trash"></span>
-					</button>
+				<div ng-repeat="place in list track by $index" class="droparea" ng-drop="true" ng-drop-success="moveBefore($index, $data, $event)">
+					<div class="place btn-group" ng-drag="true" ng-drag-data="place">
+						<span class="input-group-addon text">{{$index + 1 + ". " + place.title}}</span>
+						<button type="button" class="btn text-btn btn-default" ng-click="moveInList(place, -1)">
+							<span class="glyphicon glyphicon-chevron-up"></span>
+						</button>
+						<button type="button" class="btn text-btn btn-default" ng-click="moveInList(place, 1)">
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						</button>
+						<button type="button" class="btn text-btn btn-warning" ng-click="removeFromList(place)">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+					</div>
 				</div>
 				<div class="place spacer"></div>
 			</div>

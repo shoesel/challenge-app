@@ -1,7 +1,8 @@
 angular
 .module("chApp", [
 	"ngRoute", 
-	"ngAnimate"
+	"ngAnimate",
+	"ngDraggable"
 ])
 .value("mapProxy", {
 	map: undefined,
@@ -17,11 +18,13 @@ angular
 .value("lang", {
 	"de": {
 		"queryPlaceHolder": "Ort oder Adresse",
-		"resultError": "Ups, das hätte nicht passieren sollen"
+		"resultError": "Ups, das hätte nicht passieren sollen",
+		"subHeader": "Eine kleine Routing-Anwendung"
 	},
 	"en": {
 		"queryPlaceHolder": "Place or address",
-		"resultError": "Argh, that should not have happened"
+		"resultError": "Argh, that should not have happened",
+		"subHeader": "A small routing application"
 	}
 })
 .value("waypoints", {
