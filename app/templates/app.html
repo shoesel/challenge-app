@@ -1,43 +1,48 @@
 <div class="app" ng-controller="AppController">
 	<div class="wrapper"><!--
-	--><div class="list">
-		<div class="search input-group">
+		--><div class="search input-group">
 			<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
 			<input type="text" class="form-control" ng-model="search" ng-model-options="{debounce: 500}" placeholder="{{lang.queryPlaceHolder}}" ng-change="fetchPlaces()">
 			<span class="input-group-btn">
 				<button class="btn btn-default" type="button" ng-click="clearPlaces()"><i class="glyphicon glyphicon-remove"></i></button>
 			</span>
-		</div>
-		<div class="results">
-			<div class="loader alert alert-info" ng-show="search.length && !places.length && !error">
-				<i class="fa fa-spinner fa-spin"></i>
+		</div><!--
+		--><div class="list">
+			<div class="results">
+				<div class="place spacer"></div>
+				<div class="loader alert alert-info" ng-show="search.length && !places.length && !error">
+					<i class="fa fa-spinner fa-spin"></i>
+				</div>
+				<div class="error alert alert-danger" ng-show="search.length && error">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					{{lang.resultError}}
+				</div>
+				<div ng-repeat="place in places | orderBy:title" class="place btn-group">
+					<button type="button" class="btn text-btn btn-default" ng-click="putMarker()">{{place.title}}</button>
+					<button type="button" class="btn add-btn btn-default" ng-click="addToList()">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</div>
+				<div class="place spacer"></div>
 			</div>
-			<div class="error alert alert-danger" ng-show="search.length && error">
-				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-				{{lang.resultError}}
+			<div class="waypoints {{search.length ? 'ng-hide' : ''}}" ng-controller="ListController">
+				<div class="place spacer"></div>
+				<div ng-repeat="place in list track by $index" class="place btn-group">
+					<span class="input-group-addon text">{{$index + 1 + ". " + place.title}}</span>
+					<button type="button" class="btn text-btn btn-default" ng-click="moveInList(place, -1)">
+						<span class="glyphicon glyphicon-chevron-up"></span>
+					</button>
+					<button type="button" class="btn text-btn btn-default" ng-click="moveInList(place, 1)">
+						<span class="glyphicon glyphicon-chevron-down"></span>
+					</button>
+					<button type="button" class="btn text-btn btn-warning" ng-click="removeFromList(place)">
+						<span class="glyphicon glyphicon-trash"></span>
+					</button>
+				</div>
+				<div class="place spacer"></div>
 			</div>
-			<div ng-repeat="place in places | orderBy:title" class="place btn-group" ng-show="search.length">
-				<button type="button" class="btn text-btn btn-default" ng-click="putMarker()">{{place.title}}</button>
-				<button type="button" class="btn add-btn btn-default" ng-click="addToList()">
-					<span class="glyphicon glyphicon-plus"></span>
-				</button>
-			</div>
-		</div>
-		<div class="waypoints {{search.length ? 'ng-hide' : ''}}" ng-controller="ListController">
-			<div ng-repeat="place in list track by $index" class="place btn-group">
-				<span class="input-group-addon text">{{$index + 1 + ". " + place.title}}</span>
-				<button type="button" class="btn text-btn btn-default" ng-click="moveInList(place, -1)">
-					<span class="glyphicon glyphicon-chevron-up"></span>
-				</button>
-				<button type="button" class="btn text-btn btn-default" ng-click="moveInList(place, 1)">
-					<span class="glyphicon glyphicon-chevron-down"></span>
-				</button>
-				<button type="button" class="btn text-btn btn-warning" ng-click="removeFromList(place)">
-					<span class="glyphicon glyphicon-trash"></span>
-				</button>
-			</div>
-		</div>
-		<div class="routedetails" ng-controller="RouterController" ng-hide="places.length">
+		</div><!--
+		--><div class="routedetails" ng-controller="RouterController">
 			<div class="place btn-group">
 				<span class="input-group-addon text">{{formatValues(distance, duration).join(" ")}}</span>
 				<button type="button" class="btn text-btn {{mode=='car' ? 'btn-default':''}} {{list.length < 2 ? 'disabled' : ''}}" ng-click="toggleMode('car')">
@@ -53,8 +58,7 @@
 					<span class="glyphicon glyphicon-trash"></span>
 				</button>
 			</div>
-		</div>
-	</div><!--
-	--><div class="map" map-container></div>
-	</div>
+		</div><!--
+		--><div class="map" map-container></div><!--
+	--></div>
 </div>
