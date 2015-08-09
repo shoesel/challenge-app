@@ -18,14 +18,38 @@ $buttonWitdth: 34px;
 	}
 }
 
+%place {
+	.text {
+		width: $listWidth - 3*$buttonWitdth - 16px;
+		display: inline-block;
+		float: left;
+		text-align: left;
+		line-height: 20px;
+	}
+
+	.text-btn {
+		width: auto;
+	}
+}
 
 .app {
+	position: relative;
 	width: 1000px;
 	margin: 120px auto 0;
 
 	.wrapper {
+		overflow: hidden;
 		white-space: nowrap;
 		border: 1px solid #ddd;
+		display: inline-block;
+		margin-bottom: -6px;
+		vertical-align: bottom;
+	}
+
+	.search {
+		width: $listWidth;
+		position: absolute;
+		z-index: 2;
 	}
 
 	.list, .map {
@@ -40,11 +64,8 @@ $buttonWitdth: 34px;
 		width: $listWidth + 17px;
 		position: relative;
 
-		.search, .results {
-			width: 100%;
-		}
-
 		.results {
+			width: 100%;
 			display: table;
 			position: absolute;
 
@@ -56,6 +77,10 @@ $buttonWitdth: 34px;
 		.place {
 			display: block;
 
+			&.spacer {
+				height: 34px;
+			}
+
 			.text-btn {
 				width: $listWidth - $buttonWitdth - 5px;
 				text-align: left;
@@ -63,41 +88,43 @@ $buttonWitdth: 34px;
 			}
 		}
 
-		.results.filled ~ .waypoints {
-			position: absolute;
-			z-index: -1;
-			width: 100%;
-			height: 100%;
-		}
-
-		.routedetails {
-			position: absolute;
-			bottom: 0;
-		}
-
-		.waypoints .place, .routedetails .place {
-			.text {
-				width: $listWidth - 3*$buttonWitdth - 16px;
-				display: inline-block;
-				float: left;
-				text-align: left;
-				line-height: 20px;
-			}
-
-			.text-btn {
-				width: auto;
-			}
+		.waypoints .place {
+			@extend %place;
 		}
 
 		.routedetails .place {
+		}
+	}
+
+	.routedetails {
+		position: absolute;
+		bottom: 0;
+		z-index: 2;
+
+		.place {
+			@extend %route;
+
 			.text {
+				display: inline-block;
+				float: left;
+				line-height: 20px;
 				font-size: 12px;
-				width: $listWidth - 4*$buttonWitdth - 16px;
+				width: $listWidth - 4*($buttonWitdth - 20) - 16px;
+				text-align: left;
+			}
+
+			.text-btn {
+				padding-left: 2px;
+				padding-right: 2px;
 			}
 
 			.btn-default:focus {
 				background-color: white;
 			}
+		}
+
+		.btn-group {
+			background-color: white;
 		}
 	}
 	
