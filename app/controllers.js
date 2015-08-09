@@ -183,16 +183,25 @@ function(
 				resolve = function(result){
 					if(result.response && result.response.route){
 						var route = result.response.route[0],
-							summary = route.leg[0].summary;
+							summary = route.leg.reduce(function(memo, leg){
+								memo.distance += leg.summary.distance;
+								memo.travelTime += leg.summary.travelTime;
+							return memo;
+						}, {distance:0, travelTime:0});
 						$scope.distance = summary.distance;
 						$scope.duration = summary.travelTime;
 						RouterFactory.drawRoute(route);
+						$scope.$apply();
+					} else {
+						$scope.distance = 0;
+						$scope.duration = 0;
+						RouterFactory.clearRoute();
 						$scope.$apply();
 					}
 				};
 			mapProxy.router.calculateRoute(params, resolve, reject);
 		} else {
-			mapProxy.routeGroup.removeAll();
+			RouterFactory.clearRoute();
 		}
 	};
 
