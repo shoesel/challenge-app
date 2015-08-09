@@ -139,8 +139,13 @@ function(
 		});
 	};
 
+	var clearRoute = function(){
+		mapProxy.routeGroup.removeAll();
+	};
+
 	return {
-		drawRoute: drawRoute
+		drawRoute: drawRoute,
+		clearRoute: clearRoute
 	};
 }])
 ;
