@@ -5,25 +5,39 @@ angular
 	"mapProxy",
 	"MapFactory",
 	"$window",
+	"$timeout",
 function(
 	PlatformService,
 	mapProxy,
 	MapFactory,
-	$window
+	$window,
+	$timeout
 ){
 	return {
 		link: function(scope, elem, attr, ctrl){
-			var width = elem[0].offsetWidth;
+			var width = elem[0].offsetWidth,
+				resizeDelaying = false,
+				resizeFn = function(){
+					var newWidth = elem[0].offsetWidth;
+					if(width != newWidth){
+						width = newWidth;
+						MapFactory.resizeMap();
+					}
+				};
+			
 			angular.element($window).bind("resize", function(){
-				var newWidth = elem[0].offsetWidth;
-				if(width != newWidth){
-					console.log("resizing now");
-					width = newWidth;
-					MapFactory.resizeMap();
+				if(!resizeDelaying){
+					resizeDelaying = true;
+					$timeout(function(){
+						resizeDelaying = false;
+						resizeFn();
+					}, 100);
+					resizeFn();
 				}
 			});
-			var defaultLayers = PlatformService.createDefaultLayers();
-			mapProxy.map = new H.Map(elem[0], defaultLayers.normal.map);
+			
+			mapProxy.layers = PlatformService.createDefaultLayers();
+			mapProxy.map = new H.Map(elem[0], mapProxy.layers.normal.map);
 			mapProxy.map.addObject(mapProxy.group);
 			mapProxy.map.addObject(mapProxy.routeGroup);
 
@@ -41,4 +55,15 @@ function(
 		}
 	};
 }])
+.directive("selectIfClicked", 
+function(
+){
+	return {
+		link: function(scope, elem, attr, ctrl){
+			elem.bind("click", function(e){
+				e.target.select();
+			});
+		}
+	};
+})
 ;

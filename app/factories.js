@@ -3,12 +3,15 @@ angular
 .factory("UrlFactory", [
 	"APP_ID",
 	"APP_CODE",
+	"mapProxy",
 function(
 	app_id,
-	app_code
+	app_code,
+	mapProxy
 ){
 	var placesBaseUrl = "http://places.cit.api.here.com/places/v1/",
-		searchBaseUrl = "http://geocoder.api.here.com/6.2/";
+		searchBaseUrl = "http://geocoder.api.here.com/6.2/",
+		routeBaseUrl = "https://www.here.com/directions/";
 	return {
 		getExploreUrl : function(pos, q){
 			return [placesBaseUrl + "discover/explore?app_id=" + app_id,
@@ -22,6 +25,19 @@ function(
 				"gen=8",
 				"searchtext=" + q
 				].join("&");
+		},
+		getRouteUrl: function(list, mode){
+			var url = routeBaseUrl + (mode == "car" ? 
+				"drive/" : mode == "pedestrian" ? 
+				"walk/" : "publicTransport/");
+			url += list.map(function(item){
+				return item.title.replace(/\s+/g,"-") + ":" + item.position[0] + "," + item.position[1];
+			}).join("/");
+			var centerPos = mapProxy.map.getCenter();
+			url += "?map=" + centerPos.lat + "," + centerPos.lng + "," + mapProxy.map.getZoom();
+			var baseLayer = mapProxy.map.getBaseLayer();
+			url += ",normal";
+			return url;
 		}
 	};
 }])
@@ -63,6 +79,16 @@ function(
 
 	var resizeMap = function(){
 		mapProxy.map.getViewPort().resize();
+		var bounds = mapProxy.routeGroup.getBounds() || mapProxy.group.getBounds();
+		if(bounds){
+			Queue.add(function(resolve) {
+				mapProxy.map.setViewBounds(bounds, true);
+				mapProxy.map.addEventListener("mapviewchangeend", function(){
+					this.removeEventListener("mapviewchangeend");
+					resolve();
+				});
+			});
+		}
 	};
 
 	return {
@@ -128,6 +154,23 @@ function(
 
 		mapProxy.routeGroup.addObject(routeLine);
 
+		var startIcon = new H.map.DomIcon('<i class="fa start fa-flag-o"></i>'),
+			startPoint = route.waypoint[0].mappedPosition,
+			startMarker = new H.map.DomMarker({
+				lat: startPoint.latitude,
+				lng: startPoint.longitude
+			}, {icon: startIcon}),
+			domIcon = new H.map.DomIcon('<i class="fa end fa-flag-checkered"></i>'),
+			endPoint = route.waypoint[route.waypoint.length-1].mappedPosition,
+			endMarker = new H.map.DomMarker({
+				lat: endPoint.latitude,
+				lng: endPoint.longitude
+			}, {icon: domIcon});
+
+		mapProxy.routeGroup.addObjects([startMarker, endMarker]);
+
+		mapProxy.map.setBaseLayer(mapProxy.layers.normal.traffic);
+
 		Queue.add(function(resolve){
 			mapProxy.map.setViewBounds(routeLine.getBounds(), true);
 			mapProxy.map.addEventListener("mapviewchangeend", function(){
@@ -139,6 +182,7 @@ function(
 
 	var clearRoute = function(){
 		mapProxy.routeGroup.removeAll();
+		mapProxy.map.setBaseLayer(mapProxy.layers.normal.map);
 	};
 
 	return {
