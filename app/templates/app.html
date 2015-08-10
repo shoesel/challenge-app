@@ -50,6 +50,9 @@
 			</div>
 		</div><!--
 		--><div class="routedetails" ng-controller="RouterController">
+			<div class="input-group link" ng-show="showLink && list.length >= 2">
+  				<input type="text" value="{{routeLink}}" select-if-clicked>
+			</div>
 			<div class="place btn-group">
 				<span class="input-group-addon text">{{formatValues(distance, duration).join(" ")}}</span>
 				<button type="button" class="btn text-btn {{mode=='car' ? 'btn-default':''}} {{list.length < 2 ? 'disabled' : ''}}" ng-click="toggleMode('car')">
@@ -60,6 +63,9 @@
 				</button>
 				<button type="button" class="btn text-btn {{mode=='publicTransport' ? 'btn-default':''}} {{list.length < 2 ? 'disabled' : ''}}" ng-click="toggleMode('publicTransport')">
 					<span class="fa fa-bus"></span>
+				</button>
+				<button type="button" class="btn text-btn {{list.length < 2 ? 'disabled' : ''}}" ng-click="toggleLink()">
+					<span class="fa fa-link"></span>
 				</button>
 				<button type="button" class="btn text-btn btn-warning {{list.length < 2 ? 'disabled' : ''}}" ng-click="clearList()">
 					<span class="glyphicon glyphicon-trash"></span>

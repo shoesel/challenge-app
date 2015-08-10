@@ -55,4 +55,15 @@ function(
 		}
 	};
 }])
+.directive("selectIfClicked", 
+function(
+){
+	return {
+		link: function(scope, elem, attr, ctrl){
+			elem.bind("click", function(e){
+				e.target.select();
+			});
+		}
+	};
+})
 ;

@@ -134,6 +134,7 @@ function(
 	"RouterFactory",
 	"PlatformService",
 	"MapFactory",
+	"UrlFactory",
 function(
 	$scope,
 	waypoints,
@@ -142,12 +143,15 @@ function(
 	$http,
 	RouterFactory,
 	PlatformService,
-	MapFactory
+	MapFactory,
+	UrlFactory
 ){
 	$scope.list = waypoints.list;
 	$scope.mode = "car";
-	$scope.distance = "0m";
-	$scope.duration = "0s";
+	$scope.distance = "0";
+	$scope.duration = "0";
+	$scope.showLink = false;
+	$scope.routeLink = "";
 
 	$scope.formatValues = function(_distance, _duration){
 		var result = [],
@@ -170,10 +174,16 @@ function(
 		this.mode = mode;
 	};
 
+	$scope.toggleLink = function(){
+		$scope.showLink = !$scope.showLink;
+	};
+
 	$scope.clearList = function(){
 		this.list.splice(0, $scope.list.length);
-		$scope.distance = "0m";
-		$scope.duration = "0s";
+		$scope.distance = 0;
+		$scope.duration = 0;
+		$scope.showLink = false;
+		$scope.routeLink = "";
 		MapFactory.moveTo(mapProxy.startPos, mapProxy.zoom);
 	};
 
@@ -197,6 +207,7 @@ function(
 						$scope.distance = summary.distance;
 						$scope.duration = summary.travelTime;
 						RouterFactory.drawRoute(route);
+						$scope.routeLink = UrlFactory.getRouteUrl($scope.list, $scope.mode);
 						$scope.$apply();
 					} else {
 						$scope.distance = 0;
@@ -207,6 +218,10 @@ function(
 				};
 			mapProxy.router.calculateRoute(params, resolve, reject);
 		} else {
+			$scope.distance = 0;
+			$scope.duration = 0;
+			$scope.showRoute = false;
+			$scope.routeLink = "";
 			RouterFactory.clearRoute();
 		}
 	};

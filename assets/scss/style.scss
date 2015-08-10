@@ -206,17 +206,17 @@ h1 {
 				float: left;
 				line-height: 20px;
 				font-size: 12px;
-				width: $listWidth - 4*($buttonWitdth - 20) - 16px;
+				width: $listWidth - 5*($buttonWitdth - 19) - 16px;
 				text-align: left;
 
 				@include portable {
-					width: $listWidth - 4*($buttonWitdth - 8) - 16px;
+					width: $listWidth - 5*($buttonWitdth - 7) - 16px;
 				}
 
 				@include mobile {
 					position: absolute;
 					left: 0;
-					right: 4*($buttonWitdth - 2) - 14px;
+					right: 5*($buttonWitdth - 2) - 14px;
 					width: auto;
 				}
 			}
@@ -245,6 +245,14 @@ h1 {
 
 		.btn-group {
 			background-color: white;
+		}
+
+		.link {
+			display: block;
+
+			input {
+				width: 100%;
+			}
 		}
 	}
 

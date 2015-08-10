@@ -3,12 +3,15 @@ angular
 .factory("UrlFactory", [
 	"APP_ID",
 	"APP_CODE",
+	"mapProxy",
 function(
 	app_id,
-	app_code
+	app_code,
+	mapProxy
 ){
 	var placesBaseUrl = "http://places.cit.api.here.com/places/v1/",
-		searchBaseUrl = "http://geocoder.api.here.com/6.2/";
+		searchBaseUrl = "http://geocoder.api.here.com/6.2/",
+		routeBaseUrl = "https://www.here.com/directions/";
 	return {
 		getExploreUrl : function(pos, q){
 			return [placesBaseUrl + "discover/explore?app_id=" + app_id,
@@ -22,6 +25,19 @@ function(
 				"gen=8",
 				"searchtext=" + q
 				].join("&");
+		},
+		getRouteUrl: function(list, mode){
+			var url = routeBaseUrl + (mode == "car" ? 
+				"drive/" : mode == "pedestrian" ? 
+				"walk/" : "publicTransport/");
+			url += list.map(function(item){
+				return item.title.replace(/\s+/g,"-") + ":" + item.position[0] + "," + item.position[1];
+			}).join("/");
+			var centerPos = mapProxy.map.getCenter();
+			url += "?map=" + centerPos.lat + "," + centerPos.lng + "," + mapProxy.map.getZoom();
+			var baseLayer = mapProxy.map.getBaseLayer();
+			url += ",normal";
+			return url;
 		}
 	};
 }])
