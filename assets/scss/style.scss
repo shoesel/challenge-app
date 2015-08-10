@@ -3,6 +3,7 @@
 @import "libs/compass-mixins/lib/animation/shared";
 @import "libs/compass-mixins/lib/animation/animate";
 @import "hotfix";
+@import "breakpoints";
 
 $appWidth: 1000px;
 $listWidth: 300px;
@@ -32,21 +33,54 @@ $buttonWitdth: 34px;
 	}
 }
 
+body {
+	@include mobile {
+		background-color: #333;
+	}
+}
+
+h1 {
+	@include mobile {
+		font-size: medium;
+	}
+}
+
+.page-header {
+	@include mobile {
+		margin-top: 0;
+		color: #ddd;
+	}
+}
+
 .page-header.second {
 	position: absolute;
 	top: 99px;
 	width: 100%;
 	z-index: -1;
+
+	@include mobile {
+		display: none;
+	}
 }
 
 .page-header small {
 	margin-left: 20px;
+
+	@include mobile {
+		display: block;
+		margin-left: 0;
+		margin-top: 20px;
+	}
 }
 
 .app {
 	position: relative;
 	width: 1000px;
 	margin: 0 auto;
+
+	@include portable {
+		width: 100%;
+	}
 
 	.wrapper {
 		overflow: hidden;
@@ -55,25 +89,38 @@ $buttonWitdth: 34px;
 		display: inline-block;
 		margin-bottom: -6px;
 		vertical-align: bottom;
+
+		@include mobile {
+			width: 100%;
+		}
 	}
 
 	.search {
 		width: $listWidth;
 		position: absolute;
 		z-index: 2;
+
+		@include mobile {
+			position: relative;
+			width: auto;
+		}
 	}
 
 	.list, .map {
 		display: inline-block;
 		height: 400px;
 	}
-	
+
 	.list {
 		overflow-y: scroll;
 		overflow-x: hidden;
 		margin-right: -17px;
 		width: $listWidth + 17px;
 		position: relative;
+
+		@include mobile {
+			width: 100%;
+		}
 
 		.results {
 			width: 100%;
@@ -83,6 +130,10 @@ $buttonWitdth: 34px;
 			.loader {
 				text-align: center;
 			}
+
+			@include mobile {
+				display: block;
+			}
 		}
 
 		.place {
@@ -90,19 +141,38 @@ $buttonWitdth: 34px;
 
 			&.spacer {
 				height: 34px;
+
+				@include mobile {
+					display: none;
+				}
 			}
 
 			.text-btn {
 				width: $listWidth - $buttonWitdth - 5px;
 				text-align: left;
 				overflow: hidden;
+
+				@include mobile {
+					width: 100%;
+					margin-right: -34px - 5px;
+					&:hover, &:focus {
+						z-index: 0;
+					}
+				}
 			}
 		}
 
 		.waypoints {
-			
+
 			.place {
 				@extend %place;
+
+				.text {
+					@include mobile {
+						width: 100%;
+						margin-right: -34px - 5px;
+					}
+				}
 			}
 
 			.droparea {
@@ -117,8 +187,19 @@ $buttonWitdth: 34px;
 		bottom: 0;
 		z-index: 2;
 
+		@include mobile {
+			position: relative;
+			width: auto;
+		}
+
 		.place {
 			@extend %route;
+
+			@include mobile {
+				position: relative;
+				width: 100%;
+				text-align: right;
+			}
 
 			.text {
 				display: inline-block;
@@ -127,11 +208,34 @@ $buttonWitdth: 34px;
 				font-size: 12px;
 				width: $listWidth - 4*($buttonWitdth - 20) - 16px;
 				text-align: left;
+
+				@include portable {
+					width: $listWidth - 4*($buttonWitdth - 8) - 16px;
+				}
+
+				@include mobile {
+					position: absolute;
+					left: 0;
+					right: 4*($buttonWitdth - 2) - 14px;
+					width: auto;
+				}
 			}
 
 			.text-btn {
 				padding-left: 2px;
 				padding-right: 2px;
+
+				@include portable {
+					padding-left: 8px;
+					padding-right: 8px;
+				}
+
+				@include mobile {
+					float: none;
+					padding-left: 12px;
+					padding-right: 12px;
+					margin-left: -5px;
+				}
 			}
 
 			.btn-default:focus {
@@ -143,9 +247,22 @@ $buttonWitdth: 34px;
 			background-color: white;
 		}
 	}
-	
+
 	.map {
 		width: $appWidth - $listWidth - 2px;
 		box-shadow: 0 0 1px #ddd;
+
+		@include portable {
+			position: absolute;
+			left: 300px;
+			right: 0;
+			width: auto;
+		}
+
+		@include mobile {
+			position: relative;
+			left: auto;
+			width: 100%;
+		}
 	}
 }

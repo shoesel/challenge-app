@@ -22,7 +22,7 @@
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					{{lang.resultError}}
 				</div>
-				<div ng-repeat="place in places | orderBy:title" class="place btn-group">
+				<div ng-repeat="place in places | orderBy:title" ng-show="search.length" class="place btn-group">
 					<button type="button" class="btn text-btn btn-default" ng-click="putMarker()">{{place.title}}</button>
 					<button type="button" class="btn add-btn btn-default" ng-click="addToList()">
 						<span class="glyphicon glyphicon-plus"></span>
