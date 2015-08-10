@@ -63,6 +63,16 @@ function(
 
 	var resizeMap = function(){
 		mapProxy.map.getViewPort().resize();
+		var bounds = mapProxy.routeGroup.getBounds() || mapProxy.group.getBounds();
+		if(bounds){
+			Queue.add(function(resolve) {
+				mapProxy.map.setViewBounds(bounds, true);
+				mapProxy.map.addEventListener("mapviewchangeend", function(){
+					this.removeEventListener("mapviewchangeend");
+					resolve();
+				});
+			});
+		}
 	};
 
 	return {
