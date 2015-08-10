@@ -2,15 +2,26 @@ angular
 .module("chApp")
 .directive("mapContainer", [
 	"PlatformService",
-	"mapProxy", 
-	"MapFactory", 
+	"mapProxy",
+	"MapFactory",
+	"$window",
 function(
 	PlatformService,
-	mapProxy, 
-	MapFactory
+	mapProxy,
+	MapFactory,
+	$window
 ){
 	return {
 		link: function(scope, elem, attr, ctrl){
+			var width = elem[0].offsetWidth;
+			angular.element($window).bind("resize", function(){
+				var newWidth = elem[0].offsetWidth;
+				if(width != newWidth){
+					console.log("resizing now");
+					width = newWidth;
+					MapFactory.resizeMap();
+				}
+			});
 			var defaultLayers = PlatformService.createDefaultLayers();
 			mapProxy.map = new H.Map(elem[0], defaultLayers.normal.map);
 			mapProxy.map.addObject(mapProxy.group);

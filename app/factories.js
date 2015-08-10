@@ -61,9 +61,14 @@ function(
 		});
 	}
 
+	var resizeMap = function(){
+		mapProxy.map.getViewPort().resize();
+	};
+
 	return {
 		placeMarker: placeMarker,
-		moveTo: moveTo
+		moveTo: moveTo,
+		resizeMap: resizeMap
 	};
 }])
 .factory("RouterParameterFactory", [
