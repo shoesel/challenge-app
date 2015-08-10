@@ -128,6 +128,21 @@ function(
 
 		mapProxy.routeGroup.addObject(routeLine);
 
+		var startIcon = new H.map.DomIcon('<i class="fa start fa-flag-o"></i>'),
+			startPoint = route.waypoint[0].mappedPosition,
+			startMarker = new H.map.DomMarker({
+				lat: startPoint.latitude,
+				lng: startPoint.longitude
+			}, {icon: startIcon}),
+			domIcon = new H.map.DomIcon('<i class="fa end fa-flag-checkered"></i>'),
+			endPoint = route.waypoint[route.waypoint.length-1].mappedPosition,
+			endMarker = new H.map.DomMarker({
+				lat: endPoint.latitude,
+				lng: endPoint.longitude
+			}, {icon: domIcon});
+
+		mapProxy.routeGroup.addObjects([startMarker, endMarker]);
+
 		Queue.add(function(resolve){
 			mapProxy.map.setViewBounds(routeLine.getBounds(), true);
 			mapProxy.map.addEventListener("mapviewchangeend", function(){

@@ -264,5 +264,15 @@ h1 {
 			left: auto;
 			width: 100%;
 		}
+
+		.fa.start, .fa.end {
+			background-color: white;
+			border-radius: 100%;
+			padding: .25em;
+			font-size: 1.5em;
+			border:1px solid blue;
+			margin: -1em;
+		}
+
 	}
 }
