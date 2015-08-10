@@ -36,8 +36,8 @@ function(
 				}
 			});
 			
-			var defaultLayers = PlatformService.createDefaultLayers();
-			mapProxy.map = new H.Map(elem[0], defaultLayers.normal.map);
+			mapProxy.layers = PlatformService.createDefaultLayers();
+			mapProxy.map = new H.Map(elem[0], mapProxy.layers.normal.map);
 			mapProxy.map.addObject(mapProxy.group);
 			mapProxy.map.addObject(mapProxy.routeGroup);
 

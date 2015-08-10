@@ -153,6 +153,8 @@ function(
 
 		mapProxy.routeGroup.addObjects([startMarker, endMarker]);
 
+		mapProxy.map.setBaseLayer(mapProxy.layers.normal.traffic);
+
 		Queue.add(function(resolve){
 			mapProxy.map.setViewBounds(routeLine.getBounds(), true);
 			mapProxy.map.addEventListener("mapviewchangeend", function(){
@@ -164,6 +166,7 @@ function(
 
 	var clearRoute = function(){
 		mapProxy.routeGroup.removeAll();
+		mapProxy.map.setBaseLayer(mapProxy.layers.normal.map);
 	};
 
 	return {
