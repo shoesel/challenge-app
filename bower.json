@@ -3,6 +3,7 @@
   "version": "0.0.4",
   "dependencies": {
     "angular": "~1.4.3",
+    "angular-route": "~1.4.3",
     "fontawesome": "~4.4.0",
     "bootstrap": "~3.3.5"
   },

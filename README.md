@@ -16,6 +16,9 @@ Twitter Bootstrap is a responsive UI library written by Twitter.
 ### Font awesome
 Font Awesome is an iconic font which can be used to display many icons onto your web application.
 
+###ngRoute
+Plugin for angular to enable url-navigation in web-apps.
+
 ## Usage
 run `grunt dev` for development
 
