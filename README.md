@@ -1,5 +1,5 @@
-# Empty app
-Some info
+# ChallengeApp
+A simple web-application facilitating the HERE.COM-javascript API along with the HERE.COM-REST-interfaces.
 
 ## Installation
 Clone this repo and install all dependencies by using `npm install` and `bower install`.
